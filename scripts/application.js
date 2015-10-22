@@ -28,6 +28,7 @@ $(document).ready(function() {
                 checkForWin: function() {
                   console.log('checkForWin runs');
                   if (this.isWin()) {
+                    console.log('there is a win');
                     TicTacToe.dom.displayWin(TicTacToe.data.checkWhoseTurn());
                     TicTacToe.dom.showNewGameButton();
                   }
@@ -38,22 +39,21 @@ $(document).ready(function() {
                     console.log('isWin runs');
                     var piece = TicTacToe.data.checkWhoseTurn();
                     var winFlag = false;
-
-                    _.each(TicTacToe.data.winningPositions, function (setOfThree){
-                      var playerSetOfThree = _.map(setOfThree, function(item){
-                        if (item){
-                          return piece;
+                    _.each(TicTacToe.data.winningPositions, function (array) {
+                        var count = 0;
+                        for (var i = 0; i < array.length; i++) {
+                          if (TicTacToe.data.board[array[i]] === piece){
+                            count++;
+                            if (count === 3){
+                              winFlag = true;
+                            }
+                          }
                         }
+                      })
+                      return winFlag;
+                    }
 
-                      });
-
-                      if (_.intersection(TicTacToe.data.board, playerSetOfThree).length === 3){
-                        winFlag = true;
-                      }
-                    });
-                    return winFlag;
-                }
-              },
+                  },
 
                //data stores image file paths, board positions, turn count,
                 //and methods init, checkWhoseTurn, isSquareEmpty, and getImage
@@ -62,14 +62,9 @@ $(document).ready(function() {
                     oImage: 'img/o.jpeg',
                     board: [],
                     turn: 0,
-                    winningPositions:      [[1, 1, 1, 0, 0, 0, 0, 0, 0],
-                                          [0, 0, 0, 1, 1, 1, 0, 0, 0],
-                                          [0, 0, 0, 0, 0, 0, 1, 1, 1],
-                                          [1, 0, 0, 1, 0, 0, 1, 0, 0],
-                                          [0, 1, 0, 0, 1, 0, 0, 1, 0],
-                                          [0, 0, 1, 0, 0, 1, 0, 0, 1],
-                                          [1, 0, 0, 0, 1, 0, 0, 0, 1],
-                                          [0, 0, 1, 0, 1, 0, 1, 0, 0]],
+                    winningPositions:     [[0, 1, 2], [3, 4, 5], [6, 7, 8],
+                                           [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                                           [0, 4, 8], [2, 4, 6]],
 
                 //reset turn count and clear board data
                 initValues: function() {
