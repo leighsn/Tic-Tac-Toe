@@ -10,24 +10,16 @@ $(document).ready(function() {
                     TicTacToe.dom.initView();
                 },
 
-                //takes board positions from data object and updates screen
-                //asks for image url for each value in the array
-                //render calls addImageToBoard for each value in data
-                render: function() {
-                  console.log('render runs');
-                  for (var i = 0; i < TicTacToe.data.board.length; i++) {
-                    var url = TicTacToe.data.getImage(i);
-                    addImageToBoard(id, url);
-                  }
-                },
+                //accepts id of element to to be updated
+                //When square is empty, fetch image and place
+                //check if win
 
-                //show the correct image and validate if win
-                squareClickedOn: function(id) {
-                  console.log('squareClickedOn runs');
+                renderImage: function(id) {
                   //put the correct image into the square
                   if (TicTacToe.data.isSquareEmpty(id)) {
                       TicTacToe.data.addPieceToSquare(id);
-                      this.render();
+                      var url = TicTacToe.data.getImage(id);
+                      TicTacToe.dom.addImageToBoard(id, url);
                       this.checkForWin();
                   };
                 },
@@ -54,7 +46,7 @@ $(document).ready(function() {
                         }
 
                       });
-                      
+
                       if (_.intersection(TicTacToe.data.board, playerSetOfThree).length === 3){
                         winFlag = true;
                       }
@@ -70,26 +62,28 @@ $(document).ready(function() {
                     oImage: 'img/o.jpeg',
                     board: [],
                     turn: 0,
-                    winningPositions:  [[1, 1, 1, 0, 0, 0, 0, 0, 0],
-                                        [0, 0, 0, 1, 1, 1, 0, 0, 0],
-                                        [0, 0, 0, 0, 0, 0, 1, 1, 1],
-                                        [1, 0, 0, 1, 0, 0, 1, 0, 0],
-                                        [0, 1, 0, 0, 1, 0, 0, 1, 0],
-                                        [0, 0, 1, 0, 0, 1, 0, 0, 1],
-                                        [1, 0, 0, 0, 1, 0, 0, 0, 1],
-                                        [0, 0, 1, 0, 1, 0, 1, 0, 0]]
-                    ,
+                    winningPositions:      [[1, 1, 1, 0, 0, 0, 0, 0, 0],
+                                          [0, 0, 0, 1, 1, 1, 0, 0, 0],
+                                          [0, 0, 0, 0, 0, 0, 1, 1, 1],
+                                          [1, 0, 0, 1, 0, 0, 1, 0, 0],
+                                          [0, 1, 0, 0, 1, 0, 0, 1, 0],
+                                          [0, 0, 1, 0, 0, 1, 0, 0, 1],
+                                          [1, 0, 0, 0, 1, 0, 0, 0, 1],
+                                          [0, 0, 1, 0, 1, 0, 1, 0, 0]],
 
                 //reset turn count and clear board data
                 initValues: function() {
                   console.log('initValues runs');
-                  turn = 0;
-                  board = [];
+                  this.turn = 0;
+                  for (var i = 0; i < 9; i++) {
+                    this.board.push('e');
+                  }
                 },
                 //checks that square is empty
                 isSquareEmpty: function(id) {
                   console.log("isSquareEmpty runs")
-                  if (typeof board[id] === 'undefined') {
+                  if (this.board[id] === 'e') {
+                    console.log('empty')
                     return true;
                   } else {
                     return false;
@@ -99,7 +93,7 @@ $(document).ready(function() {
                 //returns X or O depending on whose turn it is
                 checkWhoseTurn: function() {
                   console.log('checkWhoseTurn runs');
-                  if (turn % 2 === 0) {
+                  if (this.turn % 2 === 0) {
                     return 'x';
                   } else {
                     return 'o';
@@ -108,17 +102,18 @@ $(document).ready(function() {
                 //updates board data array with piece and increment turn
                 addPieceToSquare: function(id){
                   console.log('addPieceToSquare runs');
-                  turn++;
-                  board[id] = this.checkWhoseTurn();
+                  this.turn++;
+                  this.board[id] = this.checkWhoseTurn();
+                  console.log(this.board);
                 },
                 //fetches image of x or o based on whose turn it is
                 getImage: function(id) {
                   console.log("getImage runs");
-                  if (board[id] === 'x') {
-                    return xImage;
-                  } else {
-                    return oImage;
-                  }
+                  if (this.board[id] === 'x') {
+                    return this.xImage;
+                  } else if (this.board[id]==='o') {
+                    return this.oImage;
+                  } else return;
                 }
               },
 
@@ -137,7 +132,7 @@ $(document).ready(function() {
                   }),
                   //set click listeners on square
                   $('.square').click(function(event) {
-                    TicTacToe.app.squareClickedOn(event.target.id);
+                    TicTacToe.app.renderImage(event.target.id);
                   });
                 },
 
@@ -146,8 +141,8 @@ $(document).ready(function() {
                   console.log("addImageToBoard runs");
                 //check if elem already has image, return (don't place twice)
                 var currentSquare = $('#'+id);
-                  if (currentSquare.innerHTML === '') {
-                    currentSquare.html('<img src="' + TicTacToe.data.getImage() + '">');
+                  if (currentSquare.innerHTML === undefined) {
+                    currentSquare.html('<img src="' + imageURL + '">');
                   }
                 },
                 displayWin: function(winningPlayer) {
