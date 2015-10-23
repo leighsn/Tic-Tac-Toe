@@ -70,6 +70,7 @@ $(document).ready(function() {
                 initValues: function() {
                   console.log('initValues runs');
                   this.turn = 0;
+                  this.board = [];
                   for (var i = 0; i < 9; i++) {
                     this.board.push('e');
                   }
@@ -118,10 +119,11 @@ $(document).ready(function() {
                 initView: function() {
                   console.log('initView runs');
                   //clear all squares
-                  $('.square').innerHTML = '';
+                  $('.square').empty();
+                  $('#alert').empty();
                   //hide new game button on page load
                   $('#newGame').addClass('invisible');
-                  //initializ new game when new game button is clicked
+                  //initialize new game when new game button is clicked
                   $('#newGame').click(function() {
                     TicTacToe.app.init();
                   }),
@@ -141,12 +143,12 @@ $(document).ready(function() {
                   }
                 },
                 displayWin: function(winningPlayer) {
-                  alert("Player " + winningPlayer + " won!");
+                  $('#alert').text('Player ' + winningPlayer + ' won!');
                 },
                 //show button to start new game. Is called
                 showNewGameButton: function() {
                   //TODO: show next game button
-                  $('#newGame').addClass('visible');
+                  $('#newGame').removeClass('invisible');
                 }
               }
             };
