@@ -17,12 +17,14 @@ $(document).ready(function() {
                 renderImage: function(id) {
                   console.log('renderImage runs');
                   //put the correct image into the square
-                  if (TicTacToe.data.isSquareEmpty(id) && TicTacToe.data.boardIsActive(TicTacToe.data.activeFlag)) {
+                  if (TicTacToe.data.isSquareEmpty(id) &&
+                  TicTacToe.data.boardIsActive(TicTacToe.data.activeFlag)) {
                     //console.log("entering renderImage if statement. activeFlag is " + TicTacToe.data.activeFlag);
                       TicTacToe.data.addPieceToSquare(id);
                       var url = TicTacToe.data.getImage(id);
                       TicTacToe.dom.addImageToBoard(id, url);
                       this.checkForWin();
+
                   };
                 },
 
@@ -33,42 +35,60 @@ $(document).ready(function() {
                     console.log('there is a win');
                     TicTacToe.dom.displayWin(TicTacToe.data.checkWhoseTurn());
                     TicTacToe.dom.showNewGameButton();
+                  } else if (this.isStaleMate()) {
+                    console.log("There is a stalemate");
+                    TicTacToe.dom.displayStaleMate();
+                    TicTacToe.dom.showNewGameButton();
                   }
                 },
 
-                  //checks whether there is a winner
-                  isWin: function() {
-                    //console.log('isWin runs');
-                    var piece = TicTacToe.data.checkWhoseTurn();
-                    var winFlag = false;
-                    _.each(TicTacToe.data.winningPositions, function (array) {
-                        var count = 0;
-                        for (var i = 0; i < array.length; i++) {
-                          if (TicTacToe.data.board[array[i]] === piece){
-                            count++;
-                            if (count === 3){
-                              winFlag = true;
-                              TicTacToe.data.activeFlag = false;
-                            }
-                          }
-                        }
-                      })
-                      return winFlag;
-                    }
+                isStaleMate: function() {
+                  if (TicTacToe.data.turn == 9 && !(this.isWin())){
+                    return true;
+                  } else return false;
 
-                  },
+                },
+
+                //checks whether there is a winner
+                isWin: function() {
+                //console.log('isWin runs');
+                  var piece = TicTacToe.data.checkWhoseTurn();
+                  var winFlag = false;
+                  //if current player piece is stored at all three positions in
+                  //current index of winning Positions, there is a win
+                  _.each(TicTacToe.data.winningPositions, function (array) {
+                      if (TicTacToe.data.board[array[0]] == piece &&
+                        TicTacToe.data.board[array[1]] == piece &&
+                        TicTacToe.data.board[array[2]] == piece) {
+                          TicTacToe.data.winningSquares = array;
+                          console.log('array is ' + array);
+
+                          winFlag = true;
+                          console.log(winFlag);
+                          //stop gameplay after win
+                          TicTacToe.data.activeFlag = false;
+                          TicTacToe.data.boardIsActive(TicTacToe.data.activeFlag);
+                          //turn off board is active
+                        }
+                });
+                  if (!winFlag){TicTacToe.data.winningSquares = [];}
+                  return winFlag;
+
+              }
+            },
 
                //data stores image file paths, board positions, turn count,
                 //and methods init, checkWhoseTurn, isSquareEmpty, and getImage
                 data: {
-                    xImage: 'img/x.jpg',
-                    oImage: 'img/o.jpeg',
+                    xImage: 'img/x.png',
+                    oImage: 'img/o.png',
                     board: [],
                     turn: 0,
                     activeFlag: true,
                     winningPositions:     [[0, 1, 2], [3, 4, 5], [6, 7, 8],
                                            [0, 3, 6], [1, 4, 7], [2, 5, 8],
                                            [0, 4, 8], [2, 4, 6]],
+                    winningSquares: [],
 
                 //reset turn count and clear board data
                 initValues: function() {
@@ -134,6 +154,7 @@ $(document).ready(function() {
                   //console.log('initView runs');
                   //clear all squares
                   $('.square').empty();
+                  $('.square').removeClass('win');
                   $('#alert').empty();
                   //hide new game button on page load
                   $('#newGame').addClass('invisible');
@@ -158,11 +179,18 @@ $(document).ready(function() {
                 },
                 displayWin: function(winningPlayer) {
                   $('#alert').text('Player ' + winningPlayer + ' won!');
+                  _.each(TicTacToe.data.winningSquares, this.colorWinningSquares);
                 },
-                //show button to start new game. Is called
+                colorWinningSquares: function(item) {
+                  $('#'+item).addClass('win');
+                },
+                displayStaleMate: function() {
+                  $('#alert').text('There is a stalemate!');
+                },
+                //show button to start new game.
                 showNewGameButton: function() {
                   //TODO: show next game button
                   $('#newGame').removeClass('invisible');
                 }
               }
-            };
+            }
