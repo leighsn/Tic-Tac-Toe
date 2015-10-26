@@ -32,11 +32,11 @@ $(document).ready(function() {
                 checkForWin: function() {
                   //console.log('checkForWin runs');
                   if (this.isWin()) {
-                    console.log('there is a win');
+                    //console.log('there is a win');
                     TicTacToe.dom.displayWin(TicTacToe.data.checkWhoseTurn());
                     TicTacToe.dom.showNewGameButton();
                   } else if (this.isStaleMate()) {
-                    console.log("There is a stalemate");
+                    //console.log("There is a stalemate");
                     TicTacToe.dom.displayStaleMate();
                     TicTacToe.dom.showNewGameButton();
                   }
@@ -96,6 +96,7 @@ $(document).ready(function() {
                   this.turn = 0;
                   this.board = [];
                   this.activeFlag = true;
+                  //set default values on all squares to 'e'
                   for (var i = 0; i < 9; i++) {
                     this.board.push('e');
                   }
@@ -104,7 +105,7 @@ $(document).ready(function() {
                 isSquareEmpty: function(id) {
                   //console.log("isSquareEmpty runs")
                   if (this.board[id] === 'e') {
-                    console.log('empty')
+                    //console.log('empty')
                     return true;
                   } else {
                     return false;
@@ -137,7 +138,7 @@ $(document).ready(function() {
                   } else return;
                 },
 
-                //checks if board is inactive because someone has just won
+                //checks if board active or not (because someone has won)
                 boardIsActive: function(activeFlag){
                   //console.log('boardIsActive runs');
                   if (activeFlag){
@@ -147,22 +148,23 @@ $(document).ready(function() {
 
               },
 
-              //performs actions to retrieve dom elements and show dom elements
+              //retrieve and show dom elements
               dom: {
                 //reset view to start new game.
                 initView: function() {
                   //console.log('initView runs');
-                  //clear all squares
+                  //clear all data on board view
                   $('.square').empty();
                   $('.square').removeClass('win');
                   $('#alert').empty();
                   //hide new game button on page load
                   $('#newGame').addClass('invisible');
+                  $('#alert').addClass('invisible');
                   //initialize new game when new game button is clicked
                   $('#newGame').click(function() {
                     TicTacToe.app.init();
                   }),
-                  //set click listeners on square
+                  //set click listeners on squares
                   $('.square').click(function(event) {
                     TicTacToe.app.renderImage(event.target.id);
                   });
@@ -170,22 +172,22 @@ $(document).ready(function() {
 
                 //adds the imageurl as an image tag to the div that is passed in
                 addImageToBoard: function(id, imageURL) {
-                  console.log("addImageToBoard runs");
-                //check if elem already has image, return (don't place twice)
+                  //console.log("addImageToBoard runs");
+                //check if square is empty and place image if so
                 var currentSquare = $('#'+id);
                   if (currentSquare.innerHTML === undefined) {
                     currentSquare.html('<img class="center" src="' + imageURL + '">');
                   }
                 },
                 displayWin: function(winningPlayer) {
-                  $('#alert').text('Player ' + winningPlayer + ' won!');
+                  $('#alert').removeClass('invisible').text('Player ' + winningPlayer + ' won!');
                   _.each(TicTacToe.data.winningSquares, this.colorWinningSquares);
                 },
                 colorWinningSquares: function(item) {
                   $('#'+item).addClass('win');
                 },
                 displayStaleMate: function() {
-                  $('#alert').text('There is a stalemate!');
+                  $('#alert').removeClass('invisible').text('There is a stalemate!');
                 },
                 //show button to start new game.
                 showNewGameButton: function() {

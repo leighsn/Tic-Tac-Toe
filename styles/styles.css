@@ -1,5 +1,5 @@
-html {
-  background-color: #aaa;
+body {
+  background-color: #ccc;
 }
 
 .square {
@@ -52,4 +52,21 @@ table {
 p {
     margin-left:25%;
     margin-right:25%;
+}
+
+#newGame {
+  border-style: solid;
+  border-width: 2px;
+  border-color: purple;
+  margin-top: 20px;
+}
+
+#alert {
+  background-color: fff;
+  border-style: solid;
+  border-width: 2px;
+  border-color: purple;
+  font-size: 2em;
+  margin: 0 auto;
+  width: 350px;
 }
