@@ -1,0 +1,18 @@
+_.each(TicTacToe.data.winningPositions, function (array) {
+  var count = 0;
+  for (var i = 0; i < array.length; i++) {
+    if (TicTacToe.data.board[array[i]] === piece){
+      count++;
+      TicTacToe.data.winningSquares.push(array[i]);
+      console.log('winning squares are ' + TicTacToe.data.winningSquares);
+      console.log("count is " + count);
+      if (count === 3){
+        winFlag = true;
+        TicTacToe.data.activeFlag = false;
+      }
+    }
+  }
+})
+if (!winFlag){TicTacToe.data.winningSquares = [];}
+return winFlag;
+}

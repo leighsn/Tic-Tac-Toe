@@ -1,10 +1,16 @@
-html {
-  background-color: #aaa;
+body {
+  background-color: #ccc;
 }
 
 .square {
     width:200px;
     height:200px;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .side_border {
@@ -17,6 +23,10 @@ html {
     border-bottom:1px solid #000;
 }
 
+.win {
+  background-color: #54FFFF;
+}
+
 #container {
     text-align:center;
 }
@@ -27,10 +37,6 @@ html {
 
 }
 
-.xo {
- text-align: center;
-}
-
 .invisible {
     visibility: hidden;
 }
@@ -38,11 +44,6 @@ html {
 .visible {
     visibility: visible;
 }
-/*.header {
-  font: 400 30px/1.5 'Pacifico', Helvetica, sans-serif;
-  color: #2b2b2b;
-  text-shadow: 3px 3px 0px rgba(0,0,0,0.1), 7px 7px 0px rgba(0,0,0,0.05);
-}*/
 
 table {
     background-color: #fff;
@@ -51,4 +52,21 @@ table {
 p {
     margin-left:25%;
     margin-right:25%;
+}
+
+#newGame {
+  border-style: solid;
+  border-width: 2px;
+  border-color: purple;
+  margin-top: 20px;
+}
+
+#alert {
+  background-color: fff;
+  border-style: solid;
+  border-width: 2px;
+  border-color: purple;
+  font-size: 2em;
+  margin: 0 auto;
+  width: 350px;
 }
